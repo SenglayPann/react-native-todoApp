@@ -1,11 +1,14 @@
-import {View, Text} from 'react-native';
 import React from 'react';
+import {FlatList, ScrollView} from '@gluestack-ui/themed';
+import TodoCard from '../components/TodoCard';
+
+const safeM = '$5';
 
 const Home = () => {
   return (
-    <View>
-      <Text>Home</Text>
-    </View>
+    <ScrollView m={safeM}>
+      <TodoCard />
+    </ScrollView>
   );
 };
 
