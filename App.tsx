@@ -1,13 +1,14 @@
 import {config} from '@gluestack-ui/config';
-import {View, Text, GluestackUIProvider} from '@gluestack-ui/themed';
-import React from 'react';
+import {NavigationContainer} from '@react-navigation/native';
+import {GluestackUIProvider} from '@gluestack-ui/themed';
+import Routes from './src/navigation/Routes';
 
 const App = () => {
   return (
     <GluestackUIProvider config={config}>
-      <View alignItems="center" justifyContent="center" h={'$full'}>
-        <Text>Hello world!!</Text>
-      </View>
+      <NavigationContainer>
+        <Routes />
+      </NavigationContainer>
     </GluestackUIProvider>
   );
 };
