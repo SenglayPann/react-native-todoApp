@@ -1,14 +1,14 @@
 import React from 'react';
-import {FlatList, ScrollView} from '@gluestack-ui/themed';
+import {Box, FlatList, ScrollView, View} from '@gluestack-ui/themed';
 import TodoCard from '../components/TodoCard';
-
+import TodoList from './TodoList';
 const safeM = '$5';
 
 const Home = () => {
   return (
-    <ScrollView m={safeM}>
-      <TodoCard />
-    </ScrollView>
+    <View mx={safeM}>
+      <TodoList />
+    </View>
   );
 };
 
