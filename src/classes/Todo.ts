@@ -28,7 +28,7 @@ export class Todo {
 
   private validateLength(name: string, str: string, min: number = 0, max: number = 100): errValue {
     if (str.length === min) {
-      return name + ' cannot be empty!';
+      return name + ' cannot be empty';
     } else if (str.length > max) {
       return name + ' cannot be longer than ' + max;
     }
@@ -51,6 +51,7 @@ export class Todo {
     todoError.description = this.validateLength('Description', this.description);
     todoError.title = this.validateLength('Title', this.title, 0, 50);
     todoError.dueDate = this.validateDueDate(this.dueDate);
+    return todoError;
   }
 }
 

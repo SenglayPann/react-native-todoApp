@@ -1,8 +1,7 @@
 import {View, Button} from 'react-native';
 import React, {useState} from 'react';
-import {Todo as TodoClass} from '../classes/todo';
+import {Todo as TodoClass} from '../classes/Todo';
 import DatePicker from 'react-native-date-picker';
-import moment from 'moment';
 import {dateTimeToString, strDateTimeToDateTime} from '../utils/dateTime';
 
 const AddTodo = () => {
@@ -11,7 +10,13 @@ const AddTodo = () => {
 
   console.log(date);
 
-  // const testTodo = new TodoClass('test todo', 'test description');
+  const testTodo = new TodoClass(
+    'kv smanfs nfbnksdnmas nmnss mn.m nbbm,sm dbnv,kas mdmsdnmc,ds ksjskjbjbvckjns,cnknajk cjsabzx dAHJSgckSAJ<bc kj.s,zb cjksd',
+    '',
+    date,
+  ).validate();
+
+  console.log(testTodo);
   return (
     <View>
       <Button title="Open" onPress={() => setOpen(true)} />
@@ -20,7 +25,7 @@ const AddTodo = () => {
         open={open}
         date={strDateTimeToDateTime(date)}
         onConfirm={date => {
-          console.log(date.toISOString());
+          // console.log(date.toISOString());
           setOpen(false);
           setDate(dateTimeToString(date));
         }}
