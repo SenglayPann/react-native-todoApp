@@ -2,14 +2,18 @@ import SvgIcon from 'react-native-svg-icon';
 import svgs from '../assets/Icons/svgs';
 
 type Props = {
-  width?: number;
-  height?: number;
+  dimension?: number;
 } & any;
 
 const Icon = (props: Props) => {
-  const {width, height} = props;
+  const {dimension} = props;
   return (
-    <SvgIcon width={width ?? 28} height={height ?? 28} {...props} svgs={svgs} />
+    <SvgIcon
+      width={dimension ?? 28}
+      height={dimension ?? 28}
+      {...props}
+      svgs={svgs}
+    />
   );
 };
 
