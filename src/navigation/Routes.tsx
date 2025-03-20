@@ -1,4 +1,3 @@
-import Home from '../screens/Home';
 import HomeRoutes from './HomeRoutes';
 import Stack from './stackNavigation';
 
