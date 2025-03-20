@@ -1,10 +1,11 @@
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createNativeStackNavigator, NativeStackNavigationProp } from '@react-navigation/native-stack';
 
-export type RootParamsList = {
+export type RootStackNavigationList = {
   Home: undefined,
-  CreateTodo: undefined,
+  AddTodo: undefined,
 }
+export type RootStackNavigationListProps = NativeStackNavigationProp<RootStackNavigationList>
 
-const Stack = createNativeStackNavigator<RootParamsList>();
+const Stack = createNativeStackNavigator<RootStackNavigationList>();
 
 export default Stack;

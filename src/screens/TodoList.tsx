@@ -1,14 +1,21 @@
 import React from 'react';
-import {ScrollView} from '@gluestack-ui/themed';
+import {FlatList} from '@gluestack-ui/themed';
 import TodoCard from '../components/TodoCard';
-const TodoList = () => {
+import {Todo, TodoList as TypeTodoList} from '../types/todo';
+import todoMockData from '../mockup/todo';
+
+type Props = {
+  todoList: TypeTodoList;
+};
+
+const TodoList = ({todoList}: Props) => {
   return (
-    <ScrollView height={'$full'}>
-      <TodoCard />
-      <TodoCard />
-      <TodoCard />
-      <TodoCard />
-    </ScrollView>
+    <FlatList
+      h={'$full'}
+      data={todoList}
+      renderItem={({item}) => <TodoCard todo={item} />}
+      keyExtractor={(todo: Todo) => todo.id}
+    />
   );
 };
 

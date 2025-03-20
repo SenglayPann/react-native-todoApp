@@ -14,7 +14,15 @@ const AddTodoButton = () => {
 
   const blue500 = useToken('colors', 'blue500');
   return (
-    <Box position="absolute" bottom={40} right={15} padding={10}>
+    <Box
+      position="absolute"
+      bottom={40}
+      right={15}
+      padding={10}
+      shadowOpacity={0.8}
+      shadowColor={'$coolGray900'}
+      shadowOffset={{width: 0, height: 2}}
+      shadowRadius={3}>
       <TouchableOpacity activeOpacity={0.6} onPress={handleGoToAddTodo}>
         <Icon dimension={50} name="Add" fill={blue500} />
       </TouchableOpacity>
