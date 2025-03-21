@@ -2,7 +2,6 @@ import React from 'react';
 import {FlatList} from '@gluestack-ui/themed';
 import TodoCard from '../components/TodoCard';
 import {Todo, TodoList as TypeTodoList} from '../types/todo';
-import todoMockData from '../mockup/todo';
 
 type Props = {
   todoList: TypeTodoList;

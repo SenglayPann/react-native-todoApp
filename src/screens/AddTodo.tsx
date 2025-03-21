@@ -5,6 +5,8 @@ import DatePicker from 'react-native-date-picker';
 import {dateTimeToString, strDateTimeToDateTime} from '../utils/dateTime';
 import CustomeInputField from '../components/CustomeInputField';
 import {TodoError} from '../types/todo';
+import {useSelector} from 'react-redux';
+import {RootState} from '../redux/store/store';
 
 const AddTodo = () => {
   const [date, setDate] = useState(
@@ -18,6 +20,9 @@ const AddTodo = () => {
     description: null,
     dueDate: null,
   });
+
+  const todoList = useSelector((state: RootState) => state);
+  console.log(todoList);
 
   const handleOpen = () => {
     setOpen(prev => !prev);
@@ -35,7 +40,6 @@ const AddTodo = () => {
     if (newTodoError.checkErrors()) {
       return;
     }
-    // console.log(newTodo);
   };
 
   return (
