@@ -12,6 +12,10 @@ export class TodoError {
     this.description = description ?? null;
     this.dueDate = dueDate ?? null;
   }
+
+  public checkErrors() {
+    return !!this.title || !!this.description || !!this.dueDate;
+  }
 }
 
 export class Todo {
@@ -26,18 +30,20 @@ export class Todo {
     this.dueDate = dueDate;
   }
 
-  private validateLength(name: string, str: string, min: number = 0, max: number = 100): errValue {
-    if (str.length === min) {
+  private validateLength(name: string, str: string, min: number = 2, max: number = 100): errValue {
+    if (str.length === 0) {
       return name + ' cannot be empty';
+    } else if (str.length < min) {
+      return name + ' must be at least ' + min + ' characters';
     } else if (str.length > max) {
-      return name + ' cannot be longer than ' + max;
+      return name + ' cannot be exceed ' + max + ' characters';
     }
     else {
       return null;
     }
   }
 
-  private validateDueDate(strDate: string) {
+  private validateDueDate(strDate: string): errValue {
     if (!moment(strDate).isValid()) {
       return 'Invalid date and time';
     }
@@ -46,10 +52,10 @@ export class Todo {
     }
   }
 
-  public validate() {
+  public validate(): TodoError {
     const todoError = new TodoError();
-    todoError.description = this.validateLength('Description', this.description);
-    todoError.title = this.validateLength('Title', this.title, 0, 50);
+    todoError.description = this.validateLength('Description', this.description, 2, 100);
+    todoError.title = this.validateLength('Title', this.title, 2, 50);
     todoError.dueDate = this.validateDueDate(this.dueDate);
     return todoError;
   }
