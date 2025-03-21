@@ -24,13 +24,13 @@ const todoSlices = createSlice({
     addTodo: (state, action: PayloadAction<Todo>) => {
       state.push(action.payload);
     },
-    toggleCompletion: (state, action: PayloadAction<string>) => {
+    toggleCompletion: (state, action: PayloadAction<string | undefined>) => {
       const todo = state.find(todo => todo.id === action.payload);
       if (todo) {
         todo.isCompleted = !todo.isCompleted;
       }
     },
-    deleteTodo: (state, action: PayloadAction<string>) => {
+    deleteTodo: (state, action: PayloadAction<string | undefined>) => {
       return state.filter(todo => todo.id !== action.payload);
     },
   },

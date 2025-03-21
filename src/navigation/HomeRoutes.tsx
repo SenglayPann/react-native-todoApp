@@ -1,4 +1,3 @@
-import {View, Text} from 'react-native';
 import React, {Fragment} from 'react';
 import TopTabs from './topTabsNavigation';
 import Home from '../screens/Home';

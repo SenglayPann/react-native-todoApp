@@ -1,5 +1,6 @@
 import React, {Fragment} from 'react';
 import {FlatList, View, Text} from '@gluestack-ui/themed';
+
 import TodoCard from '../components/TodoCard';
 import {Todo, TodoList as TypeTodoList} from '../types/todo';
 
