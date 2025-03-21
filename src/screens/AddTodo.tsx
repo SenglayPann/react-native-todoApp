@@ -35,6 +35,7 @@ const AddTodo = () => {
     if (newTodoError.checkErrors()) {
       return;
     }
+    // console.log(newTodo);
   };
 
   return (

@@ -1,4 +1,5 @@
 import moment from 'moment';
+import shortid from 'shortid';
 
 export type errValue = string | null;
 
@@ -19,15 +20,21 @@ export class TodoError {
 }
 
 export class Todo {
+  private id: string;
   private isCompleted: boolean = false;
   private title: string;
   private description: string;
   private dueDate: string;
 
   constructor(title: string, description: string, dueDate: string) {
+    this.id = shortid.generate();
     this.title = title;
     this.description = description;
     this.dueDate = dueDate;
+  }
+
+  public setTodoId(id: string) {
+    this.id = id;
   }
 
   private validateLength(name: string, str: string, min: number = 2, max: number = 100): errValue {
