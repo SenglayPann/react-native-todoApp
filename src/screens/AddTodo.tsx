@@ -1,12 +1,16 @@
 import {View, Button, ButtonText, Box} from '@gluestack-ui/themed';
 import React, {useState} from 'react';
 import Todo from '../classes/Todo';
+import {Todo as TodoType} from '../types/Todo';
 import DatePicker from 'react-native-date-picker';
 import {dateTimeToString, strDateTimeToDateTime} from '../utils/dateTime';
 import CustomeInputField from '../components/CustomeInputField';
 import {TodoError} from '../types/todo';
-import {useSelector} from 'react-redux';
-import {RootState} from '../redux/store/store';
+import {useDispatch, useSelector} from 'react-redux';
+import {AppDispatch, RootState} from '../redux/store/store';
+import {useNavigation} from '@react-navigation/native';
+import {RootStackNavigationListProps} from '../navigation/stackNavigation';
+import {addTodo} from '../redux/slices/todoSlices';
 
 const AddTodo = () => {
   const [date, setDate] = useState(
@@ -21,6 +25,9 @@ const AddTodo = () => {
     dueDate: null,
   });
 
+  const dispatch = useDispatch<AppDispatch>();
+  const navigation = useNavigation<RootStackNavigationListProps>();
+
   const todoList = useSelector((state: RootState) => state);
   console.log(todoList);
 
@@ -33,13 +40,23 @@ const AddTodo = () => {
   };
 
   const handleAddTodo = () => {
-    const newTodo = new Todo(title, description, date);
-    const newTodoError = newTodo.validate();
+    const newTodoObj = new Todo(title, description, date);
+    const newTodoError = newTodoObj.validate();
 
     setErrors(newTodoError);
     if (newTodoError.checkErrors()) {
       return;
     }
+    const newTodo: TodoType = {
+      id: newTodoObj.id,
+      title: newTodoObj.title,
+      description: newTodoObj.description,
+      dueDate: newTodoObj.dueDate,
+      isCompleted: newTodoObj.isCompleted,
+    };
+
+    dispatch(addTodo(newTodo));
+    navigation.goBack();
   };
 
   return (
@@ -82,7 +99,7 @@ const AddTodo = () => {
           onPress={handleOpen}
         />
 
-        <Button size="md" onPress={handleAddTodo}>
+        <Button size="lg" mt={'$4'} onPress={handleAddTodo}>
           <ButtonText>Add Todo</ButtonText>
         </Button>
       </Box>

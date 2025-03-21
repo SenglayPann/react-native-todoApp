@@ -20,11 +20,11 @@ export class TodoError {
 }
 
 export class Todo {
-  private id: string;
-  private isCompleted: boolean = false;
-  private title: string;
-  private description: string;
-  private dueDate: string;
+  public id: string;
+  public isCompleted: boolean = false;
+  public title: string;
+  public description: string;
+  public dueDate: string;
 
   constructor(title: string, description: string, dueDate: string) {
     this.id = shortid.generate();

@@ -31,12 +31,18 @@ const TodoCard = ({todo}: Props) => {
               fontSize="$lg"
               w={'$full'}
               fontWeight={'$semibold'}
-              color="$coolGray700">
+              color="$coolGray700"
+              numberOfLines={1}>
               {todo.title}
             </Heading>
             <Text fontSize={'$sm'}>{todo.dueDate}</Text>
           </HStack>
-          <Text w={'$full'} fontSize={'$sm'} mt={'$2'} lineHeight={'$md'}>
+          <Text
+            w={'$full'}
+            fontSize={'$sm'}
+            mt={'$2'}
+            lineHeight={'$md'}
+            numberOfLines={3}>
             {todo.description}
           </Text>
         </VStack>
