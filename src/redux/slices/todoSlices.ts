@@ -1,13 +1,5 @@
-/* eslint-disable @typescript-eslint/no-shadow */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Todo, TodoList } from '../../types/todo';
-// import { persistReducer } from 'redux-persist';
-// import AsyncStorage from '@react-native-async-storage/async-storage';
-
-// const todoListPersistConfig = {
-//   key: 'todoList',
-//   storage: AsyncStorage,
-// };
 
 const initialState: TodoList = [{
   id: '1',
@@ -39,5 +31,3 @@ const todoSlices = createSlice({
 export const { addTodo, toggleCompletion, deleteTodo } = todoSlices.actions;
 
 export const todoListReducers =  todoSlices.reducer;
-// const persistedTodoListReducers = persistReducer(todoListPersistConfig, todoListReducers);
-// export default persistedTodoListReducers;

@@ -1,12 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Todo } from '../../types/todo';
-// import { persistReducer } from 'redux-persist';
-// import AsyncStorage from '@react-native-async-storage/async-storage';
-
-// const todoDraftPersistconfig = {
-//   key: 'todoDraft',
-//   storage: AsyncStorage,
-// };
 
 const initialState: Todo = {
   title: '',
@@ -31,5 +24,3 @@ const todoDraftSlice = createSlice({
 export const {setTodoDraft, clearTodoDraft} = todoDraftSlice.actions;
 
 export const todoDraftReducers = todoDraftSlice.reducer;
-// const persistedTodoDraftReducers = persistReducer(todoDraftPersistconfig, todoDraftReducers);
-// export default persistedTodoDraftReducers;
