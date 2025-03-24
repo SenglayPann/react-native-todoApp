@@ -1,11 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Todo } from '../../types/todo';
 
-const initialState: Todo = {
-  title: '',
-  description: '',
-  dueDate: '',
-  isCompleted: false,
+const initialState = {
+  // title: '',
+  // description: '',
+  // dueDate: '',
+  // isCompleted: false,
 };
 
 const todoDraftSlice = createSlice({
@@ -13,7 +13,9 @@ const todoDraftSlice = createSlice({
   initialState: initialState,
   reducers: {
     setTodoDraft: (state, action: PayloadAction<Todo>) => {
-      state = action.payload;
+      return {
+        ...action.payload,
+      };
     },
     clearTodoDraft: () => {
       return initialState;

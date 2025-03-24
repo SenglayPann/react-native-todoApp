@@ -9,6 +9,7 @@ const safeM = '$5';
 
 const Home = ({route}: {route: SharedTabRouteProp}) => {
   const todoData = useSelector((state: RootState) => state.todoList);
+  console.log(useSelector(state => state));
   const context = route.name;
   const filteredTodoData = conditionTodoList(todoData, context);
   return (

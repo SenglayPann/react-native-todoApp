@@ -1,5 +1,6 @@
 import moment from 'moment';
 import shortid from 'shortid';
+import { Todo as NormalTodoType } from '../types/Todo';
 
 export type errValue = string | null;
 
@@ -57,6 +58,16 @@ export class Todo {
     else {
       return null;
     }
+  }
+
+  public generateNewInformalObject(): NormalTodoType {
+    return {
+      id: this.id,
+      title: this.title,
+      description: this.description,
+      dueDate: this.dueDate,
+      isCompleted: this.isCompleted,
+    };
   }
 
   public validate(): TodoError {

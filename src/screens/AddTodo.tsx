@@ -1,5 +1,5 @@
 import {View, Button, ButtonText, Box} from '@gluestack-ui/themed';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Todo from '../classes/Todo';
 import {Todo as TodoType} from '../types/Todo';
 import DatePicker from 'react-native-date-picker';
@@ -11,6 +11,8 @@ import {AppDispatch, RootState} from '../redux/store/store';
 import {useNavigation} from '@react-navigation/native';
 import {RootStackNavigationListProps} from '../navigation/stackNavigation';
 import {addTodo} from '../redux/slices/todoSlices';
+import {setTodoDraft} from '../redux/slices/todoDraftSlice';
+import {AppState} from 'react-native';
 
 const AddTodo = () => {
   const [date, setDate] = useState(
@@ -24,6 +26,23 @@ const AddTodo = () => {
     description: null,
     dueDate: null,
   });
+
+  useEffect(() => {
+    const handleAppStatusChange = (nextAppState: string) => {
+      if (nextAppState === 'background' || nextAppState === 'inactive') {
+        const newDraftTodo = new Todo(title, description, date);
+        console.log('triggered');
+
+        dispatch(setTodoDraft(newDraftTodo.generateNewInformalObject()));
+      }
+    };
+
+    const subscription = AppState.addEventListener(
+      'change',
+      handleAppStatusChange,
+    );
+    return () => subscription.remove();
+  }, [title, description, date]);
 
   const dispatch = useDispatch<AppDispatch>();
   const navigation = useNavigation<RootStackNavigationListProps>();
