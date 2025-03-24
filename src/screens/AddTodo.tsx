@@ -41,6 +41,14 @@ const AddTodo = () => {
   }, []);
 
   useEffect(() => {
+    const unsubcribtion = navigation.addListener('beforeRemove', () => {
+      dispatch(clearTodoDraft());
+    });
+
+    return unsubcribtion;
+  }, [dispatch, navigation]);
+
+  useEffect(() => {
     const handleAppStatusChange = (nextAppState: string) => {
       if (nextAppState !== 'active') {
         const newDraftTodo = new Todo(title, description, date);
