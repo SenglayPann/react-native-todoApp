@@ -11,7 +11,7 @@ import {AppDispatch, RootState} from '../redux/store/store';
 import {useNavigation} from '@react-navigation/native';
 import {RootStackNavigationListProps} from '../navigation/stackNavigation';
 import {addTodo} from '../redux/slices/todoSlices';
-import {setTodoDraft} from '../redux/slices/todoDraftSlice';
+import {clearTodoDraft, setTodoDraft} from '../redux/slices/todoDraftSlice';
 import {AppState} from 'react-native';
 
 const AddTodo = () => {
@@ -32,19 +32,22 @@ const AddTodo = () => {
   const navigation = useNavigation<RootStackNavigationListProps>();
 
   useEffect(() => {
-    if (todoDraft) {
-      setTitle(todoDraft.title);
-      setDescription(todoDraft.description);
-      setDate(todoDraft.dueDate);
+    if (todoDraft.isHasDraft) {
+      const todoDraftObj = todoDraft.draft;
+      setTitle(todoDraftObj.title);
+      setDescription(todoDraftObj.description);
+      setDate(todoDraftObj.dueDate);
     }
   }, []);
 
   useEffect(() => {
     const handleAppStatusChange = (nextAppState: string) => {
-      if (nextAppState === 'background' || nextAppState === 'inactive') {
+      if (nextAppState !== 'active') {
         const newDraftTodo = new Todo(title, description, date);
 
-        dispatch(setTodoDraft(newDraftTodo.generateNewInformalObject()));
+        if (!newDraftTodo.validate().checkErrors()) {
+          dispatch(setTodoDraft(newDraftTodo.generateNewInformalObject()));
+        }
       }
     };
 
@@ -52,7 +55,9 @@ const AddTodo = () => {
       'change',
       handleAppStatusChange,
     );
-    return () => subscription.remove();
+    return () => {
+      subscription.remove();
+    };
   }, [title, description, date]);
 
   const handleOpen = () => {
@@ -73,8 +78,20 @@ const AddTodo = () => {
     }
     const newTodo: TodoType = newTodoObj.generateNewInformalObject();
 
+    dispatch(clearTodoDraft());
     dispatch(addTodo(newTodo));
-    navigation.goBack();
+
+    if (navigation.canGoBack()) {
+      navigation.goBack();
+    } else {
+      navigation.navigate('Home');
+    }
+  };
+
+  const handleClearForm = () => {
+    setTitle('');
+    setDescription('');
+    setDate(dateTimeToString(new Date(new Date().getTime() + 30 * 60000)));
   };
 
   return (
@@ -117,6 +134,9 @@ const AddTodo = () => {
           onPress={handleOpen}
         />
 
+        <Button size="lg" mt={'$4'} bgColor="$red500" onPress={handleClearForm}>
+          <ButtonText>Reset</ButtonText>
+        </Button>
         <Button size="lg" mt={'$4'} onPress={handleAddTodo}>
           <ButtonText>Add Todo</ButtonText>
         </Button>
