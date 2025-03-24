@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { combineReducers } from '@reduxjs/toolkit';
 import { todoListReducers } from '../slices/todoSlices';
 import { todoDraftReducers } from '../slices/todoDraftSlice';
-import { persistReducer } from 'redux-persist'
+import { persistReducer } from 'redux-persist';
 
 const rootPersistConifg = {
   key: 'root',

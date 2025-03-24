@@ -60,9 +60,7 @@ const CustomeInputField = (props: Props) => {
             type={props.type}
             placeholder={props.placeholder}
             value={props.value}
-            onChangeText={
-              props.setter ? text => props.setter(text.trim()) : undefined
-            }
+            onChangeText={props.setter ? text => props.setter(text) : undefined}
             onPress={
               props.fieldType === 'date-time' ? props.onPress : undefined
             }

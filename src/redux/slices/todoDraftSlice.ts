@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Todo } from '../../types/todo';
 
-const initialState = {
+const initialState: Todo = {
   // title: '',
   // description: '',
   // dueDate: '',

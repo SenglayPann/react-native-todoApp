@@ -15,6 +15,7 @@ import {setTodoDraft} from '../redux/slices/todoDraftSlice';
 import {AppState} from 'react-native';
 
 const AddTodo = () => {
+  const todoDraft = useSelector((state: RootState) => state.todoDraft);
   const [date, setDate] = useState(
     dateTimeToString(new Date(new Date().getTime() + 30 * 60000)),
   );
@@ -27,11 +28,21 @@ const AddTodo = () => {
     dueDate: null,
   });
 
+  const dispatch = useDispatch<AppDispatch>();
+  const navigation = useNavigation<RootStackNavigationListProps>();
+
+  useEffect(() => {
+    if (todoDraft) {
+      setTitle(todoDraft.title);
+      setDescription(todoDraft.description);
+      setDate(todoDraft.dueDate);
+    }
+  }, []);
+
   useEffect(() => {
     const handleAppStatusChange = (nextAppState: string) => {
       if (nextAppState === 'background' || nextAppState === 'inactive') {
         const newDraftTodo = new Todo(title, description, date);
-        console.log('triggered');
 
         dispatch(setTodoDraft(newDraftTodo.generateNewInformalObject()));
       }
@@ -43,12 +54,6 @@ const AddTodo = () => {
     );
     return () => subscription.remove();
   }, [title, description, date]);
-
-  const dispatch = useDispatch<AppDispatch>();
-  const navigation = useNavigation<RootStackNavigationListProps>();
-
-  const todoList = useSelector((state: RootState) => state);
-  console.log(todoList);
 
   const handleOpen = () => {
     setOpen(prev => !prev);
@@ -66,13 +71,7 @@ const AddTodo = () => {
     if (newTodoError.checkErrors()) {
       return;
     }
-    const newTodo: TodoType = {
-      id: newTodoObj.id,
-      title: newTodoObj.title,
-      description: newTodoObj.description,
-      dueDate: newTodoObj.dueDate,
-      isCompleted: newTodoObj.isCompleted,
-    };
+    const newTodo: TodoType = newTodoObj.generateNewInformalObject();
 
     dispatch(addTodo(newTodo));
     navigation.goBack();
