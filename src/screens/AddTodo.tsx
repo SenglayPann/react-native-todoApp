@@ -1,4 +1,10 @@
-import {View, Button, ButtonText, Box} from '@gluestack-ui/themed';
+import {
+  View,
+  Button,
+  ButtonText,
+  Box,
+  KeyboardAvoidingView,
+} from '@gluestack-ui/themed';
 import React, {useEffect, useState} from 'react';
 import Todo, {errValue} from '../classes/Todo';
 import {Todo as TodoType} from '../types/Todo';
@@ -14,7 +20,12 @@ import {useNavigation} from '@react-navigation/native';
 import {RootStackNavigationListProps} from '../navigation/stackNavigation';
 import {addTodo} from '../redux/slices/todoSlices';
 import {clearTodoDraft, setTodoDraft} from '../redux/slices/todoDraftSlice';
-import {AppState} from 'react-native';
+import {
+  AppState,
+  Keyboard,
+  Platform,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import newTodoInitialState from '../mockData/newTodoSates';
 
 const AddTodo = () => {
@@ -132,39 +143,50 @@ const AddTodo = () => {
   };
 
   return (
-    <View w={'$full'}>
-      <DatePicker
-        modal
-        open={open}
-        date={new Date(new Date().getTime() + 30 * 60000)}
-        minimumDate={new Date()}
-        onConfirm={handleConfirm}
-        onCancel={handleOpen}
-      />
-      <Box m="$6">
-        {states.map((state: CustomeFields) => (
-          <CustomeInputField
-            key={state.label}
-            fieldType={state.fieldType}
-            type={state.type}
-            label={state.label}
-            placeholder={state.placeholder}
-            value={state.value}
-            setter={handleSetState}
-            helperText={state.helperText}
-            error={state.error}
-            onPress={state.fieldType === 'date-time' ? handleOpen : () => null}
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View w={'$full'}>
+          <DatePicker
+            modal
+            open={open}
+            date={new Date(new Date().getTime() + 30 * 60000)}
+            minimumDate={new Date()}
+            onConfirm={handleConfirm}
+            onCancel={handleOpen}
           />
-        ))}
+          <Box m="$6">
+            {states.map((state: CustomeFields) => (
+              <CustomeInputField
+                key={state.label}
+                fieldType={state.fieldType}
+                type={state.type}
+                label={state.label}
+                placeholder={state.placeholder}
+                value={state.value}
+                setter={handleSetState}
+                helperText={state.helperText}
+                error={state.error}
+                onPress={
+                  state.fieldType === 'date-time' ? handleOpen : () => null
+                }
+              />
+            ))}
 
-        <Button size="lg" mt={'$4'} bgColor="$red500" onPress={handleClearForm}>
-          <ButtonText>Reset</ButtonText>
-        </Button>
-        <Button size="lg" mt={'$4'} onPress={handleAddTodo}>
-          <ButtonText>Add Todo</ButtonText>
-        </Button>
-      </Box>
-    </View>
+            <Button
+              size="lg"
+              mt={'$4'}
+              bgColor="$red500"
+              onPress={handleClearForm}>
+              <ButtonText>Reset</ButtonText>
+            </Button>
+            <Button size="lg" mt={'$4'} onPress={handleAddTodo}>
+              <ButtonText>Add Todo</ButtonText>
+            </Button>
+          </Box>
+        </View>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 };
 
