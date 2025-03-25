@@ -15,20 +15,30 @@ import {
   Textarea,
 } from '@gluestack-ui/themed';
 
-type Props = {
+export type CustomeFields = {
   label: string;
   type: 'password' | 'text' | undefined;
   fieldType?: 'date-time' | 'text-area' | 'normal';
   value: string;
   setter?: Function;
-  placeholder: string;
+  placeholder?: string;
   helperText?: string;
   error: string | null;
   isRequired?: boolean;
   onPress?: Function;
 };
 
-const CustomeInputField = (props: Props) => {
+export type wantedField = {
+  label: string;
+  value: string;
+  error: string | null;
+};
+
+export type wantedFields = wantedField[];
+
+export type CustomeFieldsList = CustomeFields[];
+
+const CustomeInputField = (props: CustomeFields) => {
   return (
     <FormControl
       my={'$1'}
@@ -48,19 +58,24 @@ const CustomeInputField = (props: Props) => {
         <Textarea borderRadius={'$lg'} size="md">
           <TextareaInput
             value={props.value}
-            onChangeText={text => props.setter(text)}
+            onChangeText={text => props.setter(props.label, 'value', text)}
             placeholder={props.placeholder}
           />
         </Textarea>
       ) : (
         <Input
           borderRadius={'$lg'}
-          isReadOnly={props.fieldType === 'date-time'}>
+          isReadOnly={props.fieldType === 'date-time'}
+          isRequired={props.isRequired ?? false}>
           <InputField
             type={props.type}
             placeholder={props.placeholder}
             value={props.value}
-            onChangeText={props.setter ? text => props.setter(text) : undefined}
+            onChangeText={
+              props.setter
+                ? text => props.setter(props.label, 'value', text)
+                : undefined
+            }
             onPress={
               props.fieldType === 'date-time' ? props.onPress : undefined
             }

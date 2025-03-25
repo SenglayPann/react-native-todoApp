@@ -1,11 +1,13 @@
 import {View, Button, ButtonText, Box} from '@gluestack-ui/themed';
 import React, {useEffect, useState} from 'react';
-import Todo from '../classes/Todo';
+import Todo, {errValue} from '../classes/Todo';
 import {Todo as TodoType} from '../types/Todo';
 import DatePicker from 'react-native-date-picker';
-import {dateTimeToString, strDateTimeToDateTime} from '../utils/dateTime';
-import CustomeInputField from '../components/CustomeInputField';
-import {TodoError} from '../types/todo';
+import {dateTimeToString} from '../utils/dateTime';
+import CustomeInputField, {
+  CustomeFields,
+  CustomeFieldsList,
+} from '../components/CustomeInputField';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppDispatch, RootState} from '../redux/store/store';
 import {useNavigation} from '@react-navigation/native';
@@ -13,32 +15,49 @@ import {RootStackNavigationListProps} from '../navigation/stackNavigation';
 import {addTodo} from '../redux/slices/todoSlices';
 import {clearTodoDraft, setTodoDraft} from '../redux/slices/todoDraftSlice';
 import {AppState} from 'react-native';
+import newTodoInitialState from '../mockData/newTodoSates';
 
 const AddTodo = () => {
   const todoDraft = useSelector((state: RootState) => state.todoDraft);
-  const [date, setDate] = useState(
-    dateTimeToString(new Date(new Date().getTime() + 30 * 60000)),
-  );
   const [open, setOpen] = useState(false);
-  const [title, setTitle] = useState<string>('');
-  const [description, setDescription] = useState<string>('');
-  const [errors, setErrors] = useState<TodoError>({
-    title: null,
-    description: null,
-    dueDate: null,
-  });
 
   const dispatch = useDispatch<AppDispatch>();
   const navigation = useNavigation<RootStackNavigationListProps>();
 
+  const [states, setStates] = useState<CustomeFieldsList>(newTodoInitialState);
+
+  const handleSetState = (
+    label: string,
+    field: keyof CustomeFields,
+    value: string | errValue,
+  ) => {
+    setStates(prevStates =>
+      prevStates.map(state =>
+        state.label.toUpperCase() === label.toUpperCase()
+          ? {...state, [field]: value}
+          : state,
+      ),
+    );
+  };
+
   useEffect(() => {
     if (todoDraft.isHasDraft) {
-      const todoDraftObj = todoDraft.draft;
-      setTitle(todoDraftObj.title);
-      setDescription(todoDraftObj.description);
-      setDate(todoDraftObj.dueDate);
+      setStates(prevStates =>
+        prevStates.map(state => {
+          if (state.label.toUpperCase() === 'TITLE') {
+            return {...state, value: todoDraft.draft.title};
+          }
+          if (state.label.toUpperCase() === 'DESCRIPTION') {
+            return {...state, value: todoDraft.draft.description};
+          }
+          if (state.label.toUpperCase() === 'DUEDATE') {
+            return {...state, value: todoDraft.draft.dueDate};
+          }
+          return state;
+        }),
+      );
     }
-  }, []);
+  }, [todoDraft]);
 
   useEffect(() => {
     const unsubcribtion = navigation.addListener('beforeRemove', () => {
@@ -51,7 +70,11 @@ const AddTodo = () => {
   useEffect(() => {
     const handleAppStatusChange = (nextAppState: string) => {
       if (nextAppState !== 'active') {
-        const newDraftTodo = new Todo(title, description, date);
+        const newDraftTodo = new Todo(
+          states[0].value,
+          states[1].value,
+          states[2].value,
+        );
 
         if (!newDraftTodo.validate().checkErrors()) {
           dispatch(setTodoDraft(newDraftTodo.generateNewInformalObject()));
@@ -66,21 +89,29 @@ const AddTodo = () => {
     return () => {
       subscription.remove();
     };
-  }, [title, description, date]);
+  }, [states]);
 
   const handleOpen = () => {
     setOpen(prev => !prev);
   };
 
-  const handleConfirm = (date: Date) => {
-    setDate(dateTimeToString(date));
+  const handleConfirm = (selectedDate: Date) => {
+    handleSetState('Date', 'value', dateTimeToString(selectedDate));
+    setOpen(false);
   };
 
   const handleAddTodo = () => {
-    const newTodoObj = new Todo(title, description, date);
+    const newTodoObj = new Todo(
+      states[0].value,
+      states[1].value,
+      states[2].value,
+    );
+
     const newTodoError = newTodoObj.validate();
 
-    setErrors(newTodoError);
+    handleSetState('title', 'error', newTodoError.title);
+    handleSetState('description', 'error', newTodoError.description);
+    handleSetState('dueDate', 'error', newTodoError.dueDate);
     if (newTodoError.checkErrors()) {
       return;
     }
@@ -97,9 +128,7 @@ const AddTodo = () => {
   };
 
   const handleClearForm = () => {
-    setTitle('');
-    setDescription('');
-    setDate(dateTimeToString(new Date(new Date().getTime() + 30 * 60000)));
+    setStates(newTodoInitialState);
   };
 
   return (
@@ -107,40 +136,26 @@ const AddTodo = () => {
       <DatePicker
         modal
         open={open}
-        date={strDateTimeToDateTime(date)}
+        date={new Date(new Date().getTime() + 30 * 60000)}
         minimumDate={new Date()}
         onConfirm={handleConfirm}
         onCancel={handleOpen}
       />
       <Box m="$6">
-        <CustomeInputField
-          type="text"
-          label="Title"
-          placeholder="Enter Title"
-          value={title}
-          setter={setTitle}
-          helperText="Title must be 2 min characters and 50 max"
-          error={errors.title}
-        />
-        <CustomeInputField
-          fieldType="text-area"
-          type="text"
-          label="Description"
-          placeholder="Enter Description"
-          value={description}
-          setter={setDescription}
-          helperText="Description must be 2 min characters and 100 max"
-          error={errors.description}
-        />
-        <CustomeInputField
-          fieldType="date-time"
-          type="text"
-          label="Date"
-          placeholder="Choose a date and time"
-          value={date}
-          error={errors.dueDate}
-          onPress={handleOpen}
-        />
+        {states.map((state: CustomeFields) => (
+          <CustomeInputField
+            key={state.label}
+            fieldType={state.fieldType}
+            type={state.type}
+            label={state.label}
+            placeholder={state.placeholder}
+            value={state.value}
+            setter={handleSetState}
+            helperText={state.helperText}
+            error={state.error}
+            onPress={state.fieldType === 'date-time' ? handleOpen : () => null}
+          />
+        ))}
 
         <Button size="lg" mt={'$4'} bgColor="$red500" onPress={handleClearForm}>
           <ButtonText>Reset</ButtonText>
