@@ -64,7 +64,8 @@ const CustomeInputField = (props: CustomeFields) => {
           />
         </Textarea>
       ) : (
-        <Pressable onPress={props.onPress}>
+        <Pressable
+          onPress={props.fieldType === 'date-time' ? props.onPress : null}>
           <Input
             borderRadius={'$lg'}
             isReadOnly={props.fieldType === 'date-time'}
@@ -78,7 +79,7 @@ const CustomeInputField = (props: CustomeFields) => {
                   ? text => props.setter(props.label, 'value', text)
                   : undefined
               }
-              onPress={props.onPress}
+              onPress={props.fieldType === 'date-time' ? props.onPress : null}
             />
           </Input>
         </Pressable>
