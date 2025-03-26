@@ -7,7 +7,8 @@ import {
   useToken,
   VStack,
 } from '@gluestack-ui/themed';
-import Icon from './Icon';
+import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
+import AnDesignIcon from 'react-native-vector-icons/AntDesign';
 import {TouchableOpacity} from 'react-native';
 import {Todo} from '../types/todo';
 import CustomeModal from './CustomeModal';
@@ -43,13 +44,22 @@ const TodoCard = ({todo}: Props) => {
             <TouchableOpacity
               activeOpacity={0.6}
               onPress={handleToggleCompletion}>
-              <Icon name="Tick" fill={todo.isCompleted ? green500 : gray500} />
+              <AnDesignIcon
+                name="checkcircle"
+                color={todo.isCompleted ? green500 : gray500}
+                size={20}
+              />
             </TouchableOpacity>
 
             <TouchableOpacity
               activeOpacity={0.6}
               onPress={handleOpenConfirmModal}>
-              <Icon name="Bin" fill={red500} height={24} />
+              <FontAwesomeIcon
+                name="trash"
+                fill={red500}
+                size={20}
+                color={red500}
+              />
             </TouchableOpacity>
           </VStack>
 

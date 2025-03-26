@@ -167,16 +167,14 @@ const AddTodo = () => {
                 setter={handleSetState}
                 helperText={state.helperText}
                 error={state.error}
-                onPress={
-                  state.fieldType === 'date-time' ? handleOpen : () => null
-                }
+                onPress={handleOpen}
               />
             ))}
 
             <Button
               size="lg"
               mt={'$4'}
-              bgColor="$red500"
+              action="negative"
               onPress={handleClearForm}>
               <ButtonText>Reset</ButtonText>
             </Button>

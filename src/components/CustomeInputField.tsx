@@ -13,6 +13,7 @@ import {
   InputField,
   TextareaInput,
   Textarea,
+  Pressable,
 } from '@gluestack-ui/themed';
 
 export type CustomeFields = {
@@ -25,7 +26,7 @@ export type CustomeFields = {
   helperText?: string;
   error: string | null;
   isRequired?: boolean;
-  onPress?: Function;
+  onPress?: Function | null;
 };
 
 export type wantedField = {
@@ -63,24 +64,24 @@ const CustomeInputField = (props: CustomeFields) => {
           />
         </Textarea>
       ) : (
-        <Input
-          borderRadius={'$lg'}
-          isReadOnly={props.fieldType === 'date-time'}
-          isRequired={props.isRequired ?? false}>
-          <InputField
-            type={props.type}
-            placeholder={props.placeholder}
-            value={props.value}
-            onChangeText={
-              props.setter
-                ? text => props.setter(props.label, 'value', text)
-                : undefined
-            }
-            onPress={
-              props.fieldType === 'date-time' ? props.onPress : undefined
-            }
-          />
-        </Input>
+        <Pressable onPress={props.onPress}>
+          <Input
+            borderRadius={'$lg'}
+            isReadOnly={props.fieldType === 'date-time'}
+            isRequired={props.isRequired ?? false}>
+            <InputField
+              type={props.type}
+              placeholder={props.placeholder}
+              value={props.value}
+              onChangeText={
+                props.setter
+                  ? text => props.setter(props.label, 'value', text)
+                  : undefined
+              }
+              onPress={props.onPress}
+            />
+          </Input>
+        </Pressable>
       )}
       <FormControlHelper>
         {props.helperText && (
